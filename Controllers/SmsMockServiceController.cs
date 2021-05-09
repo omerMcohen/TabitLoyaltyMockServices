@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Xml.Serialization;
@@ -25,50 +26,71 @@ namespace TabitLoyaltyMockServices.Controllers
 
             var inforu = jCustomer["inforuXML"].ToString();
 
+            inforu = inforu.Replace("&", "LogicAnd");
+
             Inforu result;
 
-            using (TextReader reader = new StringReader(inforu))
+            var memStream = new MemoryStream(Encoding.UTF8.GetBytes(inforu));
+
+            using (StreamReader reader = new StreamReader(memStream, Encoding.UTF8, true))
             {
                 result = (Inforu)serializer.Deserialize(reader);
             }
 
-            Task t = Task.Run(() =>
+            object objResp = null;
+
+            var t = Task.Run(() =>
             {
-                PostSmsResponse(result);
+                objResp = PostSmsResponse(result);
             });
 
             t.Wait();
 
-            return GetResult();
+            return GetResult(objResp as IRestResponse);
         }
 
-        private static string GetResult()
+        private static string GetResult(IRestResponse objResp)
         {
             KeyValuePair<int, string> shamirResult = InforuErrors.GetRandomShamirResult(true);
 
-            string result = "<Result> <Status>" + shamirResult.Key + "</Status>";
-            result += "<Description>" + shamirResult.Value + "</Description> ";
+            string result = "<Result> <Status>" + objResp.StatusCode + "</Status>";
+            result += "<Description>" + objResp.StatusDescription + "</Description> ";
             result += "<NumberOfRecipients>1</NumberOfRecipients> </Result>";
 
             return result;
         }
 
-        private void PostSmsResponse(Inforu item)
+        private IRestResponse PostSmsResponse(Inforu item)
         {
-            var client = new RestClient(item.Settings.DeliveryNotificationUrl);
-
-            var request = new RestRequest(Method.POST);
-
-            var body = getMessageBody(item);
-
-            request.AddParameter("text/xml", body, ParameterType.RequestBody);
-
             try
             {
-                // execute the request
-                IRestResponse response = client.Execute(request);
+                if (string.IsNullOrEmpty(item.Settings.DeliveryNotificationUrl))
+                    throw new Exception();
+
+                var formatedUrl = item.Settings.DeliveryNotificationUrl.Replace("LogicAnd", "&");
+
+                var client = new RestClient(formatedUrl);
+
+                var request = new RestRequest(Method.POST);
+
+                var body = getMessageBody(item);
+
+                request.AddParameter("text/xml", body, ParameterType.RequestBody);
+
+                var response = client.Execute(request);
+
+                return response;
             }
-            catch (Exception) { }
+            catch (Exception ex) 
+            {
+                var ErrResponse = new RestResponse();
+
+                ErrResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
+
+                ErrResponse.StatusDescription = "ERROR Sending Sms";
+
+                return ErrResponse;
+            }
         }
 
         private object getMessageBody(Inforu item)

@@ -1,34 +1,10 @@
 ﻿
-//// NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
-///// <remarks/>
-//[System.SerializableAttribute()]
-//[System.ComponentModel.DesignerCategoryAttribute("code")]
-//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-//[System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
-//public partial class Inforu
-//{
-
-//    private InforuRootInforu[] inforuField;
-
-//    /// <remarks/>
-//    [System.Xml.Serialization.XmlElementAttribute("Inforu")]
-//    public InforuRootInforu[] InforuRootInforus 
-//    {
-//        get
-//        {
-//            return this.inforuField;
-//        }
-//        set
-//        {
-//            this.inforuField = value;
-//        }
-//    }
-//}
-
+using System;
 /// <remarks/>
 [System.SerializableAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
 [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+
 public partial class Inforu
 {
 
@@ -206,6 +182,7 @@ public partial class InforuRootInforuSettings
 
     private int customerMessageIDField;
 
+
     private string deliveryNotificationUrlField;
 
     /// <remarks/>
@@ -248,6 +225,7 @@ public partial class InforuRootInforuSettings
     }
 
     /// <remarks/>
+   
     public string DeliveryNotificationUrl
     {
         get
