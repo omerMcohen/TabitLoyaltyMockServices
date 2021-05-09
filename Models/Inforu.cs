@@ -1,35 +1,35 @@
 ﻿
-// NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
+//// NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
+///// <remarks/>
+//[System.SerializableAttribute()]
+//[System.ComponentModel.DesignerCategoryAttribute("code")]
+//[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+//[System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
+//public partial class Inforu
+//{
+
+//    private InforuRootInforu[] inforuField;
+
+//    /// <remarks/>
+//    [System.Xml.Serialization.XmlElementAttribute("Inforu")]
+//    public InforuRootInforu[] InforuRootInforus 
+//    {
+//        get
+//        {
+//            return this.inforuField;
+//        }
+//        set
+//        {
+//            this.inforuField = value;
+//        }
+//    }
+//}
+
 /// <remarks/>
 [System.SerializableAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
 [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-[System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
-public partial class InforuRoot
-{
-
-    private InforuRootInforu[] inforuField;
-
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute("Inforu")]
-    public InforuRootInforu[] Inforu
-    {
-        get
-        {
-            return this.inforuField;
-        }
-        set
-        {
-            this.inforuField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.SerializableAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-public partial class InforuRootInforu
+public partial class Inforu
 {
 
     private InforuRootInforuUser userField;
@@ -66,7 +66,7 @@ public partial class InforuRootInforu
         }
     }
 
-    /// <remarks/>
+    ///// <remarks/>
     public InforuRootInforuRecipients Recipients
     {
         get
@@ -79,7 +79,7 @@ public partial class InforuRootInforu
         }
     }
 
-    /// <remarks/>
+    ///// <remarks/>
     public InforuRootInforuSettings Settings
     {
         get

@@ -1,45 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Xml.Serialization;
 using LoyaltyAPI.AppCode.Helper;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using RestSharp;
+using FromBodyAttribute = Microsoft.AspNetCore.Mvc.FromBodyAttribute;
 
 namespace TabitLoyaltyMockServices.Controllers
 {
     [RoutePrefix("api/SmsMock")]
     public class SmsMockServiceController : ApiController
     {
-        [HttpPost]
-        [Route("send")]
-        public async Task<Object> send(HttpRequestMessage request)
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("send")]
+        [Consumes("application/x-www-form-urlencoded")]
+        public async Task<Object> send([FromBody] JObject jCustomer)
         {
-            string requestBody = await request.Content.ReadAsStringAsync();
 
-            var serializer = new XmlSerializer(typeof(InforuRoot));
-            var memStream = new MemoryStream(Encoding.UTF8.GetBytes(requestBody));
-            var requestXml = (InforuRoot)serializer.Deserialize(memStream);
-            int numberOfMessageSend = requestXml.Inforu.Length;
+            var serializer = new XmlSerializer(typeof(Inforu));
 
+            var inforu = jCustomer["inforuXML"].ToString();
 
-            // handle post result 
-            new Thread(() =>
+            Inforu result;
+
+            using (TextReader reader = new StringReader(inforu))
             {
-                Thread.CurrentThread.IsBackground = true;
-                /* run your code here */
-                HandleRequest(requestXml);
-            }).Start();
+                result = (Inforu)serializer.Deserialize(reader);
+            }
 
-            Thread.Sleep(300); // mock delay of 300 ms
-            return GetShamirSingleResult(numberOfMessageSend);
+            Task t = Task.Run(() =>
+            {
+                PostSmsResponse(result);
+            });
+
+            t.Wait();
+
+            return GetResult();
         }
 
-        private static string GetShamirSingleResult()
+        private static string GetResult()
         {
             KeyValuePair<int, string> shamirResult = InforuErrors.GetRandomShamirResult(true);
 
@@ -50,20 +53,11 @@ namespace TabitLoyaltyMockServices.Controllers
             return result;
         }
 
-
-        private void HandleRequest(InforuRoot requestXml)
+        private void PostSmsResponse(Inforu item)
         {
-            foreach (var item in requestXml.Inforu)
-            {
-                PostSmsResponse(item);
-            }
-        }
+            var client = new RestClient(item.Settings.DeliveryNotificationUrl);
 
-        private void PostSmsResponse(InforuRootInforu item)
-        {
-            var client = new RestClient("https://tabitloyaltyaf-dev.azurewebsites.net/api/");
-
-            var request = new RestRequest("IL_HttpTrigger_SmsProviderCallBack", Method.POST);
+            var request = new RestRequest(Method.POST);
 
             var body = getMessageBody(item);
 
@@ -77,7 +71,7 @@ namespace TabitLoyaltyMockServices.Controllers
             catch (Exception) { }
         }
 
-        private object getMessageBody(InforuRootInforu item)
+        private object getMessageBody(Inforu item)
         {
             return @"PhoneNumber=0" + item.Recipients.PhoneNumber + "&Network=0" + item.Recipients.PhoneNumber.ToString().Substring(0, 2) + "&Status=2&StatusDescription=Delivered&ProjectId=11477&CustomerMessageId=" + item.Settings.CustomerMessageID + "&CustomerParam=&id=&SenderNumber=Tabit&BillingCodeId=1&Price=0.00&SegmentsNumber=1&ActionType=&OriginalMessage=" + item.Content.Message;
         }
