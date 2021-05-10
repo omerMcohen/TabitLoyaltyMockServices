@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Xml.Serialization;
-using LoyaltyAPI.AppCode.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -51,8 +49,6 @@ namespace TabitLoyaltyMockServices.Controllers
 
         private static string GetResult(IRestResponse objResp)
         {
-            KeyValuePair<int, string> shamirResult = InforuErrors.GetRandomShamirResult(true);
-
             string result = "<Result> <Status>" + objResp.StatusCode + "</Status>";
             result += "<Description>" + objResp.StatusDescription + "</Description> ";
             result += "<NumberOfRecipients>1</NumberOfRecipients> </Result>";

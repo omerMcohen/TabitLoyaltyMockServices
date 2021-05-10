@@ -276,7 +276,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\InforuErrors.cs" />
     <Compile Include="Models\Inforu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
