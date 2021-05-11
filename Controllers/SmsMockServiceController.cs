@@ -42,15 +42,13 @@ namespace TabitLoyaltyMockServices.Controllers
                 objResp = PostSmsResponse(result);
             });
 
-            t.Wait();
-
             return GetResult(objResp as IRestResponse);
         }
 
         private static string GetResult(IRestResponse objResp)
         {
-            string result = "<Result> <Status>" + objResp.StatusCode + "</Status>";
-            result += "<Description>" + objResp.StatusDescription + "</Description> ";
+            string result = "<Result> <Status>" + "OK" + "</Status>";
+            result += "<Description>" + "Message Sent" + "</Description> ";
             result += "<NumberOfRecipients>1</NumberOfRecipients> </Result>";
 
             return result;
