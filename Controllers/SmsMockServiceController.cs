@@ -26,6 +26,8 @@ namespace TabitLoyaltyMockServices.Controllers
 
             inforu = inforu.Replace("&", "LogicAnd");
 
+            inforu = inforu.Replace("\\", "");
+
             Inforu result;
 
             var memStream = new MemoryStream(Encoding.UTF8.GetBytes(inforu));
