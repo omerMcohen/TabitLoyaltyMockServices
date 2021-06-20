@@ -153,10 +153,10 @@ public partial class InforuRootInforuContent
 public partial class InforuRootInforuRecipients
 {
 
-    private uint phoneNumberField;
+    private string phoneNumberField;
 
     /// <remarks/>
-    public uint PhoneNumber
+    public string PhoneNumber
     {
         get
         {
@@ -180,7 +180,7 @@ public partial class InforuRootInforuSettings
 
     private string senderNumberField;
 
-    private int customerMessageIDField;
+    private string customerMessageIDField;
 
 
     private string deliveryNotificationUrlField;
@@ -212,7 +212,7 @@ public partial class InforuRootInforuSettings
     }
 
     /// <remarks/>
-    public int CustomerMessageID
+    public string CustomerMessageID
     {
         get
         {
