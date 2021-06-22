@@ -22,7 +22,7 @@ namespace TabitLoyaltyMockServices.Controllers
 
             var serializer = new XmlSerializer(typeof(Inforu));
 
-            var inforu = jCustomer["inforuXML"].ToString();
+            var inforu = jCustomer["InforuXML"].ToString();
 
             inforu = inforu.Replace("&", "LogicAnd");
 
@@ -49,7 +49,7 @@ namespace TabitLoyaltyMockServices.Controllers
 
         private static string GetResult(IRestResponse objResp)
         {
-            string result = "<Result> <Status>" + "OK" + "</Status>";
+            string result = "<Result> <Status>" + "1" + "</Status>";
             result += "<Description>" + "Message Sent" + "</Description> ";
             result += "<NumberOfRecipients>1</NumberOfRecipients> </Result>";
 
